@@ -1,4 +1,4 @@
-from lecture_pdf import lire_pdf
+from read_pdf import lire_pdf
 
 def decouper_en_chunks(texte, taille_paquet=3):
     texte_propre = texte.replace("\n", " ")
