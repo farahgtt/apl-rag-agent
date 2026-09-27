@@ -1,15 +1,30 @@
 from read_pdf import lire_pdf
 from chunks import decouper_en_chunks
 from embeddings import embedder_chunks
+from recherche import trouver_chunk_pertinent
+from llm import demander_au_llm
+from recherche import debug_scores
 
-# 1. Lire le PDF
+# --- Préparation (fait une seule fois au démarrage) ---
 texte = lire_pdf("Fiche_APL.pdf")
-
-# 2. Découper en chunks
 chunks = decouper_en_chunks(texte)
-
-# 3. Générer un vecteur pour chaque chunk
 vecteurs_chunks = embedder_chunks(chunks)
 
-print(f"{len(chunks)} chunks transformés en vecteurs")
-print(f"Chaque vecteur fait {len(vecteurs_chunks[0])} nombres de long")
+print(f"Document chargé : {len(chunks)} chunks prêts.\n")
+
+# --- Boucle de questions (comme ton shell en C !) ---
+while True:
+    question = input("Pose ta question (ou 'exit' pour quitter) : ")
+    
+    if question.lower() == "exit":
+        break
+
+    # 1. Trouver le chunk le plus pertinent
+    chunk_trouve = trouver_chunk_pertinent(question, chunks, vecteurs_chunks)
+    
+    print(f"\n[Chunk utilisé : {chunk_trouve[:80]}...]\n")
+    
+    # 2. Demander au LLM de répondre en se basant dessus
+    reponse = demander_au_llm(question, chunk_trouve)
+    
+    print(f"Réponse : {reponse}\n")

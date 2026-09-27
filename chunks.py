@@ -1,6 +1,6 @@
 from read_pdf import lire_pdf
 
-def decouper_en_chunks(texte, taille_paquet=3):
+def decouper_en_chunks(texte, taille_paquet=1):
     texte_propre = texte.replace("\n", " ")
     phrases = texte_propre.split(". ")
     phrases = [p.strip() for p in phrases if len(p.strip()) > 10]
